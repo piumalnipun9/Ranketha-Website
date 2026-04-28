@@ -1,0 +1,174 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  SELLER
+}
+
+enum OrderStatus {
+  CART
+  ORDERED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String        @unique
+  password     String
+  phone        String?
+  emailVerified Boolean      @default(false)
+  emailVerificationCode String?
+  emailVerificationExpires DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  orders       Order[]
+  reviews      Review[]
+  addresses    Address[]
+  role         UserRole      @default(CUSTOMER)
+  expensesCreated Expense[]
+  productsSold Product[]     @relation("SellerProducts")
+}
+
+model Product {
+  id            String            @id @default(cuid())
+  itemCode      String            @unique 
+  name          String
+  slug          String            @unique
+  description   String
+  imageUrls     String[]
+  price         Float
+  stockQuantity Int               @default(0)
+  isFeatured    Boolean           @default(false)
+  isUsed        Boolean           @default(false)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  categories    ProductCategory[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+  seller        User?             @relation("SellerProducts", fields: [sellerId], references: [id])
+  sellerId      String?
+}
+
+model Category {
+  id       String            @id @default(cuid())
+  name     String            @unique
+  slug     String            @unique
+  products ProductCategory[]
+}
+
+model ProductCategory {
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([productId, categoryId])
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  user              User        @relation(fields: [userId], references: [id])
+  userId            String
+  totalAmount       Float       @default(0)
+  status            OrderStatus @default(CART)
+  shippingAddress   Address?    @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String?
+  trackingNumber    String?
+  notes             String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  items             OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  price     Float
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model Address {
+  id           String  @id @default(cuid())
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String
+  fullName     String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  district     String
+  zipCode      String
+  phoneNumber  String?
+  isDefault    Boolean @default(false)
+  orders       Order[]
+}
+
+model Project {
+  id               String   @id @default(cuid())
+  name             String
+  description      String?
+  imageUrls        String[]
+  projectUrl       String?
+  technologiesUsed String[]
+  displayOrder     Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("site")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Records of business expenses for accounting purposes
+model Expense {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  amount        Float
+  category      String
+  paymentMethod String?
+  vendor        String?
+  date          DateTime @default(now())
+  notes         String?
+  receiptUrl    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Optional: which user created the expense entry
+  createdBy     User?    @relation(fields: [createdById], references: [id])
+  createdById   String?
+
+  @@index([date])
+  @@index([category])
+}

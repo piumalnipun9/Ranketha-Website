@@ -1,0 +1,25 @@
+# Development files
+.vscode/
+.github/
+.git/
+.gitignore
+README.md
+*.md
+
+/dist
+
+# Tests
+**/__tests__/
+**/*.test.ts
+**/*.spec.ts
+jest.config.js
+
+# Source maps
+**/*.js.map
+**/*.map
+
+# Build artifacts
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log

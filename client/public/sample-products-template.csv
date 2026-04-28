@@ -1,0 +1,2 @@
+name,description,price,stockQuantity,itemCode,imageUrl,isFeatured,isUsed,categories
+"Sample Product","Short description here",1999.99,10,SKU-EX123,"https://example.com/image.jpg",false,false,"Dev Boards"

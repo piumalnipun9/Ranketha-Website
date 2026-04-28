@@ -1,0 +1,391 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Ranketha Color Palette */
+    --background: 0 0% 100%;
+    /* White */
+    --foreground: 178 73% 10%;
+    /* Evergreen */
+    --card: 60 52% 87%;
+    /* Beige */
+    --card-foreground: 178 73% 10%;
+    /* Evergreen */
+    --popover: 0 0% 100%;
+    --popover-foreground: 178 73% 10%;
+    /* Evergreen */
+    --primary:48 100% 50%;
+    /* Bright Amber */
+    --primary-foreground: 178 73% 10%;
+    /* Evergreen */
+    --secondary: 220 18% 93%;
+    /* Platinum */
+    --secondary-foreground: 178 73% 10%;
+    /* Evergreen */
+    --muted: 220 18% 93%;
+    /* Platinum */
+    --muted-foreground: 178 40% 30%;
+    --accent: 60 52% 87%;
+    /* Beige */
+    --accent-foreground: 178 73% 10%;
+    /* Evergreen */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 60 20% 85%;
+    --input: 60 20% 85%;
+    --ring: 48 100% 50%;
+    /* Bright Amber */
+    --radius: 0.75rem;
+
+    /* Chart colors */
+    --chart-1: 48 100% 50%;
+    /* Bright Amber */
+    --chart-2: 178 73% 10%;
+    /* Evergreen */
+    --chart-3: 60 52% 70%;
+    /* Beige darker */
+    --chart-4: 220 18% 80%;
+    /* Platinum darker */
+    --chart-5: 48 80% 60%;
+    /* Amber lighter */
+
+    /* Custom Ranketha colors */
+    --ranketha-amber: 48 100% 50%;
+    --ranketha-platinum: 220 18% 93%;
+    --ranketha-beige: 60 52% 87%;
+    --ranketha-evergreen: 178 73% 10%;
+  }
+
+  .dark {
+    --background: 178 73% 10%;
+    /* Evergreen */
+    --foreground: 60 52% 87%;
+    /* Beige */
+    --card: 178 60% 15%;
+    --card-foreground: 60 52% 87%;
+    --popover: 178 73% 10%;
+    --popover-foreground: 60 52% 87%;
+    --primary: 48 100% 50%;
+    /* Bright Amber */
+    --primary-foreground: 178 73% 10%;
+    --secondary: 178 50% 20%;
+    --secondary-foreground: 60 52% 87%;
+    --muted: 178 50% 20%;
+    --muted-foreground: 60 30% 70%;
+    --accent: 178 50% 20%;
+    --accent-foreground: 60 52% 87%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 178 50% 20%;
+    --input: 178 50% 20%;
+    --ring: 48 100% 50%;
+    --chart-1: 48 100% 50%;
+    --chart-2: 60 52% 87%;
+    --chart-3: 178 40% 40%;
+    --chart-4: 220 18% 70%;
+    --chart-5: 48 80% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+  }
+}
+
+/* Custom utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar with Ranketha colors */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #EFEFCC;
+  /* Beige */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #072C2B;
+  /* Evergreen */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #052d2c;
+  /* Lighter Evergreen */
+}
+
+/* Focus styles */
+.focus-visible:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating animation for decorative elements */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+/* Gradient text utilities - Ranketha themed */
+.gradient-text {
+  background: linear-gradient(135deg, #FDCB00, #072C2B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-amber {
+  background: linear-gradient(135deg, #FDCB00, #d4a800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(239, 239, 204, 0.8);
+  /* Beige with opacity */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(253, 203, 0, 0.2);
+}
+
+.glass-dark {
+  background: rgba(7, 44, 43, 0.9);
+  /* Evergreen with opacity */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(253, 203, 0, 0.1);
+}
+
+/* Button hover effects */
+.btn-hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(7, 44, 43, 0.1), 0 10px 10px -5px rgba(7, 44, 43, 0.04);
+}
+
+/* Loading spinner with Ranketha colors */
+.spinner {
+  border: 2px solid #EFEFCC;
+  /* Beige */
+  border-top: 2px solid #FDCB00;
+  /* Bright Amber */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Toast animations */
+.toast-enter {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+
+.toast-enter-active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.toast-exit {
+  opacity: 1;
+}
+
+.toast-exit-active {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Mobile responsive utilities */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Ranketha specific utility classes */
+.bg-ranketha-amber {
+  background-color: #FDCB00;
+}
+
+.bg-ranketha-platinum {
+  background-color: #EBEDF1;
+}
+
+.bg-ranketha-beige {
+  background-color: #EFEFCC;
+}
+
+.bg-ranketha-evergreen {
+  background-color: #072C2B;
+}
+
+.text-ranketha-amber {
+  color: #FDCB00;
+}
+
+.text-ranketha-platinum {
+  color: #EBEDF1;
+}
+
+.text-ranketha-beige {
+  color: #EFEFCC;
+}
+
+.text-ranketha-evergreen {
+  color: #072C2B;
+}
+
+/* Organic/Natural decorative patterns */
+.pattern-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+}
+
+/* Honey drip effect */
+.honey-drip {
+  position: relative;
+}
+
+.honey-drip::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background: #FDCB00;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: drip 3s ease-in-out infinite;
+}
+
+@keyframes drip {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(5px) scale(1.1);
+  }
+}

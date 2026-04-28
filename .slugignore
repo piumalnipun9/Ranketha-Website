@@ -1,0 +1,5 @@
+node_modules
+client/.next/cache
+client/.next/standalone
+*.log
+*.map

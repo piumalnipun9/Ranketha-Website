@@ -1,0 +1,34 @@
+# Ranketha - Traditional Rice, Honey & Crafts Store
+# https://ranketha.lk
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ranketha.lk/sitemap.xml
+
+# Disallow admin and private pages
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /my-account
+Disallow: /my-account/*
+Disallow: /checkout
+Disallow: /seller
+Disallow: /seller/*
+Disallow: /login
+Disallow: /register
+Disallow: /verify-email
+
+# Allow search engines to crawl main pages
+Allow: /products
+Allow: /products/*
+Allow: /categories
+Allow: /categories/*
+Allow: /contact-us
+Allow: /help-center
+Allow: /shipping-info
+Allow: /returns
+
+# Crawl delay for politeness
+Crawl-delay: 1
