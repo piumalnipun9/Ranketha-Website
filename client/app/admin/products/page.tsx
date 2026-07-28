@@ -43,6 +43,7 @@ export default function ProductsPage() {
         isFeatured: false,
         isUsed: false,
     })
+    const [isUploading, setIsUploading] = useState(false)
 
     const [isBulkDialogOpen, setIsBulkDialogOpen] = useState(false)
     const [csvFile, setCsvFile] = useState<File | null>(null)
@@ -184,6 +185,34 @@ export default function ProductsPage() {
         })
         setIsDialogOpen(true);
     }
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const fd = new FormData();
+            fd.append('image', file);
+            const resp = await fetch(`${API_BASE_URL}/admin/upload-image`, {
+                method: 'POST',
+                headers: {
+                    ...(token ? { Authorization: `Bearer ${token}` } : {})
+                } as any,
+                body: fd,
+            });
+            
+            if (!resp.ok) throw new Error('Upload failed');
+            const data = await resp.json();
+            
+            setProductForm((prev) => ({ ...prev, image: data.url }));
+        } catch (err: any) {
+            alert(err?.message || 'Failed to upload image');
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const handleSaveProduct = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -367,13 +396,35 @@ export default function ProductsPage() {
                         </div>
 
                         <div>
-                            <Label htmlFor="image">Image URL</Label>
-                            <Input
-                                id="image"
-                                value={productForm.image}
-                                onChange={(e) => setProductForm((prev) => ({ ...prev, image: e.target.value }))}
-                                placeholder="/placeholder.svg?height=200&width=200"
-                            />
+                            <Label htmlFor="image">Image</Label>
+                            <div className="flex flex-col gap-2">
+                                <div className="flex gap-2">
+                                    <Input
+                                        id="image"
+                                        value={productForm.image}
+                                        onChange={(e) => setProductForm((prev) => ({ ...prev, image: e.target.value }))}
+                                        placeholder="/images/products/example.jpg"
+                                        className="flex-1"
+                                    />
+                                    <div className="relative overflow-hidden inline-block shrink-0">
+                                        <Button type="button" variant="outline" disabled={isUploading}>
+                                            {isUploading ? "Uploading..." : "Upload File"}
+                                        </Button>
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            disabled={isUploading}
+                                        />
+                                    </div>
+                                </div>
+                                {productForm.image && (
+                                    <div className="mt-2 h-32 w-32 relative border rounded-md overflow-hidden bg-slate-100 flex items-center justify-center">
+                                        <img src={productForm.image} alt="Preview" className="object-cover max-w-full max-h-full" />
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div>

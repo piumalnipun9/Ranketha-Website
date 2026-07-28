@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { sendMail } from '../lib/mailer.js';
 import multer from 'multer';
 import { parse } from 'csv-parse/sync';
+import path from 'node:path';
+import fs from 'node:fs';
 
 type AuthenticatedRequest = Request;
 
@@ -29,6 +31,27 @@ const isAdmin = (req: AuthenticatedRequest, res: Response): boolean => {
 export default function createAdminRoutes(prisma: any, authenticateToken: any) {
   const router = Router();
   const upload = multer({ storage: multer.memoryStorage() });
+
+  const imageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      // process.cwd() is expected to be the root of the Ranketha-Website project
+      const dest = path.resolve(process.cwd(), 'client/public/images/products');
+      if (!fs.existsSync(dest)) {
+        fs.mkdirSync(dest, { recursive: true });
+      }
+      cb(null, dest);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      const name = path.basename(file.originalname, ext).replace(/[^a-zA-Z0-9_-]/g, '-');
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, `${uniqueSuffix}-${name}${ext}`);
+    }
+  });
+  const imageUpload = multer({ 
+    storage: imageStorage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  });
 
   // ==============================
   // DASHBOARD & ANALYTICS ROUTES
@@ -381,6 +404,27 @@ export default function createAdminRoutes(prisma: any, authenticateToken: any) {
   // ==============================
   // PRODUCT MANAGEMENT ROUTES
   // ==============================
+
+  // @route   POST /admin/upload-image
+  // @desc    Upload an image for a product
+  // @access  Private (Admin only)
+  router.post("/upload-image", authenticateToken, imageUpload.single('image'), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      if (!isAdmin(req, res)) return;
+
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image file provided' });
+      }
+
+      // The URL path starts from the public folder, so we just return the relative path
+      const imageUrl = `/images/products/${req.file.filename}`;
+      
+      res.status(200).json({ url: imageUrl });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
   // @route   GET /admin/products
   // @desc    Get all products (admin version with more details)

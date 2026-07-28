@@ -3,17 +3,14 @@ import { HeroSection } from "@/components/home/HeroSection"
 import { FeaturedProducts } from "@/components/home/FeaturedProducts"
 import { NewsletterSection } from "@/components/home/NewsletterSection"
 import { Footer } from "@/components/home/Footer"
-import { mockProducts } from "@/lib/constants"
 
 import type { Product as FeaturedCardProduct } from "@/lib/constants"
 
 const FEATURED_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL || '/api'}/products/featured`
 
-const FALLBACK_PRODUCTS = mockProducts.slice(0, 8)
-
 async function getFeaturedProducts(): Promise<FeaturedCardProduct[]> {
   if (!FEATURED_ENDPOINT) {
-    return FALLBACK_PRODUCTS
+    return []
   }
 
   try {
@@ -45,10 +42,10 @@ async function getFeaturedProducts(): Promise<FeaturedCardProduct[]> {
       }
     })
 
-    return mapped.length ? mapped : FALLBACK_PRODUCTS
+    return mapped.length ? mapped : []
   } catch (error) {
     console.error('Failed to load featured products', error)
-    return FALLBACK_PRODUCTS
+    return []
   }
 }
 
