@@ -1,4 +1,4 @@
-"# Ranketha Website
+# Ranketha Website
 
 Ranketha is a full-stack e-commerce website with a Next.js frontend and an Express/Prisma backend. It includes product browsing, cart and checkout flows, an admin area, and email-based order notifications.
 
