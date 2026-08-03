@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -30,8 +35,8 @@ const nextConfig = {
   // Mark API routes as dynamic to prevent static generation errors
   env: {
     BUILD_MODE: process.env.NEXT_PHASE === 'build' ? 'static' : 'dynamic',
-    NEXT_PUBLIC_API_URL: process.env.API_URL || 'http://localhost:4000/api',
-    NEXT_PUBLIC_COMPANY_NAME: process.env.COMPANY_NAME || 'Ranketha',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:4000/api',
+    NEXT_PUBLIC_COMPANY_NAME: process.env.NEXT_PUBLIC_COMPANY_NAME || process.env.COMPANY_NAME || 'Ranketha',
   },
 }
 

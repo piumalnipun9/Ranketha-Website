@@ -31,3 +31,5 @@ database_url.txt
 *.tsbuildinfo
 next-env.d.ts
 tokens
+seed.ts*
+server/prisma/seed.ts

@@ -1,7 +1,9 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import path from 'node:path';
 
-dotenv.config();
+const envPath = process.env.SERVER_ENV_PATH || path.resolve(process.cwd(), '.env');
+dotenv.config({ path: envPath });
 export interface MailPayload {
   to: string
   subject: string

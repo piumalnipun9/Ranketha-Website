@@ -63,16 +63,18 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     ...candidateImages,
     ...(product.imageUrl ? [product.imageUrl] : [])
   ]
-  const validImages: string[] = rawCandidates
+  const cleanImages: string[] = rawCandidates
     .filter((u): u is string => typeof u === 'string' && u.length > 0)
     .map((u) => u.split('?')[0])
     .map((u) => u.split('#')[0])
     .filter((u) => !u.toLowerCase().endsWith('.svg'))
     .filter((u) => !/placeholder\.(png|jpg)$/i.test(u))
     .filter((u) => !/logo/i.test(u))
-    .map((u) => (u.startsWith('http') ? u : `https://ranketha.lk${u}`))
-    // Ensure enhancedProduct has imageUrls for UI gallery
-    ; (enhancedProduct as any).imageUrls = validImages.length > 0 ? validImages : [enhancedProduct.image]
+    
+  const seoImages: string[] = cleanImages.map((u) => (u.startsWith('http') ? u : `https://ranketha.lk${u}`))
+
+  // Ensure enhancedProduct has imageUrls for UI gallery
+  ; (enhancedProduct as any).imageUrls = cleanImages.length > 0 ? cleanImages : [enhancedProduct.image]
   const categoryName = product.category?.name || "Uncategorized"
   const breadcrumbItems = getProductPageBreadcrumbs(
     product.name,
@@ -82,12 +84,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     undefined
   )
 
+  const seoFallbackImage = enhancedProduct.image?.startsWith('http') 
+    ? enhancedProduct.image 
+    : `https://ranketha.lk${enhancedProduct.image || '/placeholder.jpg'}`;
+
   return (
     <>
       <ProductJsonLd
         product={{
           ...enhancedProduct,
-          image: (enhancedProduct as any).imageUrls
+          image: seoImages.length > 0 ? seoImages : [seoFallbackImage]
         }}
         url={`https://ranketha.lk${productUrl}`}
       />

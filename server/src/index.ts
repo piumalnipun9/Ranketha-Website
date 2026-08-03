@@ -22,7 +22,7 @@ import jwt from 'jsonwebtoken';
 
 import { fileURLToPath } from "url";
 
-const envPath = process.env.SERVER_ENV_PATH || path.resolve(process.cwd(), 'server', '.env');
+const envPath = process.env.SERVER_ENV_PATH || path.resolve(process.cwd(), '.env');
 dotenv.config({ path: envPath });
 
 console.log("NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
