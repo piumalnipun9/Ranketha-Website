@@ -33,3 +33,6 @@ next-env.d.ts
 tokens
 seed.ts*
 server/prisma/seed.ts
+
+# Prisma migrations
+server/prisma/migrations/
